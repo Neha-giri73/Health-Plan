@@ -134,11 +134,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
-<div class="stats-bar">
-  <div class="stat"><div class="stat-num">56<span style="font-size:13px">kg</span></div><div class="stat-label">Current</div></div>
-  <div class="stat"><div class="stat-num">54<span style="font-size:13px">kg</span></div><div class="stat-label">Target</div></div>
-  <div class="stat"><div class="stat-num">5'5"</div><div class="stat-label">Height</div></div>
-  <div class="stat"><div class="stat-num">20.7</div><div class="stat-label">BMI ✅</div></div>
+<div class="stats-bar" style="flex-direction:column;padding:0">
+  <div style="display:flex;width:100%">
+    <div class="stat"><div class="stat-num" id="bmi-val">--</div><div class="stat-label">BMI</div></div>
+    <div class="stat"><div class="stat-num" id="bmi-cat" style="font-size:13px">--</div><div class="stat-label">Category</div></div>
+    <div class="stat"><div class="stat-num" id="ideal-val">--</div><div class="stat-label">Ideal (kg)</div></div>
+    <div class="stat"><div class="stat-num" id="to-lose">--</div><div class="stat-label">Status</div></div>
+  </div>
+  <div style="padding:10px 16px;background:#F8F4FF;border-top:1px solid #F3E5F5">
+    <div style="font-size:11px;font-weight:800;color:#B39DCA;margin-bottom:6px">BMI CALCULATOR</div>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <div style="flex:1;min-width:80px"><div style="font-size:10px;color:#B39DCA;margin-bottom:2px">Height (cm)</div><input id="inp-ht" type="number" value="165" style="width:100%;padding:6px 8px;border:1.5px solid #CE93D8;border-radius:8px;font-size:13px;font-weight:700;background:#fff"></div>
+      <div style="flex:1;min-width:80px"><div style="font-size:10px;color:#B39DCA;margin-bottom:2px">Weight (kg)</div><input id="inp-wt" type="number" value="56" style="width:100%;padding:6px 8px;border:1.5px solid #CE93D8;border-radius:8px;font-size:13px;font-weight:700;background:#fff"></div>
+      <button onclick="calcBMI()" style="background:#7B1FA2;color:#fff;border:none;border-radius:8px;padding:8px 14px;font-size:12px;font-weight:800;cursor:pointer;margin-top:12px">Calculate</button>
+    </div>
+    <div id="bmi-bar-wrap" style="margin-top:10px;display:none">
+      <div style="display:flex;justify-content:space-between;font-size:10px;color:#B39DCA;margin-bottom:3px"><span>Underweight</span><span>Normal</span><span>Overweight</span><span>Obese</span></div>
+      <div style="background:#eee;border-radius:8px;height:10px;position:relative">
+        <div style="position:absolute;left:0;width:25%;height:100%;background:#64B5F6;border-radius:8px 0 0 8px"></div>
+        <div style="position:absolute;left:25%;width:25%;height:100%;background:#81C784"></div>
+        <div style="position:absolute;left:50%;width:25%;height:100%;background:#FFB74D"></div>
+        <div style="position:absolute;left:75%;width:25%;height:100%;background:#E57373;border-radius:0 8px 8px 0"></div>
+        <div id="bmi-marker" style="position:absolute;top:-4px;width:4px;height:18px;background:#7B1FA2;border-radius:2px;transform:translateX(-50%);display:none"></div>
+      </div>
+      <div style="margin-top:6px;font-size:12px;font-weight:700;color:#7B1FA2" id="bmi-advice"></div>
+    </div>
+  </div>
 </div>
 
 <div class="tabs-wrap">
@@ -153,6 +174,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <button class="tab-btn" onclick="sw(8)">🛒 Shopping</button>
   <button class="tab-btn" onclick="sw(9)">💊 Supplements</button>
   <button class="tab-btn" onclick="sw(10)">⚠️ Avoid</button>
+  <button class="tab-btn" onclick="sw(11)">💡 Tips</button>
 </div>
 
 <div class="content">
@@ -180,7 +202,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="tl-item t-normal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">2:30 PM</div><div class="tl-act">Post lunch 10 min walk</div><div class="tl-det">WFH advantage — ghar ke andar bhi chaloge toh kaam karega.</div></div></div>
   <div class="tl-item t-meal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">4:00 PM</div><div class="tl-act">Evening snack</div><div class="tl-det">Roasted chana / makhana / apple + green tea after.</div></div></div>
   <div class="tl-item t-meal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">7:30 PM</div><div class="tl-act">🌙 Dinner — Light, ghar ka</div><div class="tl-det">Khichdi / paneer sabzi + roti. Done by 8pm strictly.</div></div></div>
-  <div class="tl-item t-normal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">8:00 PM</div><div class="tl-act">Post dinner walk — 15 min</div><div class="tl-det">Dono saath mein. Gas fix + digestion + stress relief.</div></div></div>
+  <div class="tl-item t-normal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">8:00 PM</div><div class="tl-act">Post dinner walk — 15 min</div><div class="tl-det">15 min walk after dinner. Gas fix + digestion + stress relief.</div></div></div>
   <div class="tl-item t-normal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">9:30 PM</div><div class="tl-act">Isabgol + warm water</div><div class="tl-det">1 tsp isabgol. Gut cleaner. Daily without fail.</div></div></div>
   <div class="tl-item t-normal"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">9:45 PM</div><div class="tl-act">🌸 Haldi doodh (period days)</div><div class="tl-det">Specially during periods — anti-inflammatory, pain relief, better sleep.</div></div></div>
   <div class="tl-item t-sleep"><div class="tl-left"><div class="tl-dot"></div><div class="tl-line"></div></div><div class="tl-block"><div class="tl-time">10:00 PM</div><div class="tl-act">Wind down — screens off</div><div class="tl-det">Stress ka biggest fix — blue light band karo. Cortisol naturally drops.</div></div></div>
@@ -191,7 +213,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="pane" id="p1">
   <div class="sec-title">Meal Plan</div>
   <div class="sec-sub">Pure Veg | Iron-rich | Hormone-friendly | Gut healing</div>
-  <div class="card card-purple"><div style="font-size:13px;font-weight:700;color:#4A148C">💡 Pure veg mein protein thoda effort se aata hai — but doable hai. Paneer + dal + curd + nuts = enough. Dal jabardasti khilani padegi 😄 but taste mein theek ho jaayegi.</div></div>
+  <div class="card card-purple"><div style="font-size:13px;font-weight:700;color:#4A148C">💡 Pure veg mein protein thoda effort se aata hai — but doable hai. Paneer + dal + curd + nuts = enough. Dal ko different ways mein prepare karo — taste ke saath nutrition pakka hoga.</div></div>
 
   <div class="sub-head">🌅 Breakfast Options — Rotate Daily</div>
   <div class="card"><div class="meal-hdr"><div><span class="meal-title">Option A — Moong Dal Chilla</span><span class="meal-time">8:00 AM</span></div><span class="tag tp">⚡ 15 min</span></div><div class="meal-item">2 moong dal chilla (batter ready night before)</div><div class="meal-item">Stuff with paneer + veggies</div><div class="meal-item">Green chutney + 1 glass warm milk</div><div class="meal-note">💡 Highest protein veg breakfast. Best for energy.</div></div>
@@ -226,12 +248,15 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="sub-head">🌙 Soak Night Before</div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Almonds</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Vitamin E, magnesium — period cramp relief directly</div></div><span class="tag tp">8-10 pcs</span></div></div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Walnuts</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Omega-3 — inflammation reduce, period pain soothe</div></div><span class="tag tp">4-5 halves</span></div></div>
-  <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Cashews</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Zinc + iron — women ke liye critical, immunity boost</div></div><span class="tag tp">4-5 pcs</span></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Cashews</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Zinc + iron — critical for women, immunity boost</div></div><span class="tag tp">4-5 pcs</span></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Kismis (Raisins) 🍇</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Iron + natural energy. Soaked = 3x better absorption. Period days mein especially helpful.</div></div><span class="tag tp">15-20 pcs</span></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Anjeer / Figs 🟤</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Highest iron + calcium. Fiber fixes gas. Magnesium reduces cramps. Period days mein 4-5 lo.</div></div><span class="tag tp">2-3 pcs</span></div></div>
   <div class="sub-head">🌱 Add Dry (No Soaking)</div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Pumpkin Seeds</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Magnesium + zinc — period cramp ka #1 natural fix</div></div><span class="tag ty">1.5 tsp</span></div></div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Flaxseeds (ground)</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Phytoestrogens — hormone balance karta hai naturally. Omega-3.</div></div><span class="tag ty">1 tsp</span></div></div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Sunflower Seeds</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Vitamin E — PMS symptoms reduce karta hai</div></div><span class="tag ty">1 tsp</span></div></div>
   <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Chia Seeds</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Calcium, fiber, hydration</div></div><span class="tag ty">1 tsp</span></div></div>
+  <div class="card"><div style="display:flex;justify-content:space-between;align-items:flex-start"><div><div style="font-size:14px;font-weight:800">Pista (Pistachios) 🟢</div><div style="font-size:12px;color:#B39DCA;margin-top:2px">Potassium + Vitamin B6 — mood, hormones, energy. High protein nut for pure veg diet.</div></div><span class="tag ty">10-12 pcs</span></div></div>
   <div class="sub-head">🥛 How to Have It</div>
   <div class="card card-yellow"><div style="font-size:13px;line-height:1.8"><b>Option A (Classic):</b> Soaked nuts seedha khao → seeds upar se → 1 glass warm full-fat milk + 1 tsp honey.<br><br><b>Option B (Smoothie):</b> Blend nuts + seeds + 1 glass milk + 1 banana. Smooth, no chewing.<br><br><b>Option C (Oats mein mix):</b> Seeds overnight oats mein daal do — ek hi bowl mein sab.</div></div>
   <div class="card card-pink"><div style="font-size:13px;font-weight:800;color:#880E4F;margin-bottom:6px">🌸 Seed Cycling — Hormone Balance</div><div style="font-size:13px;line-height:1.6;color:#6B5B8A">Periods ke pehle 2 weeks (Day 1-14): <b>Flaxseeds + Pumpkin seeds</b> focus — estrogen support.<br>Baad ke 2 weeks (Day 15-28): <b>Sunflower + Sesame seeds</b> focus — progesterone support. Period pain significantly reduce hota hai 2-3 months mein.</div></div>
@@ -272,7 +297,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 
   <div class="sub-head">🚶 Walk Days — 25 min (Tue/Fri)</div>
-  <div class="card card-blue"><div style="font-size:13px;line-height:1.8">WFH hone ke kaaran ghar pe hi chalogi mostly.<br><br>• Morning 7:15 pe 25 min walk<br>• Society/colony mein brisk walk<br>• Ya treadmill if available<br>• Post lunch 10 min (schedule mein already hai)<br>• Post dinner 15 min dono saath ✅</div></div>
+  <div class="card card-blue"><div style="font-size:13px;line-height:1.8">WFH advantage — home-based walk easily possible hai.<br><br>• Morning 7:15 pe 25 min walk<br>• Society/colony mein brisk walk<br>• Ya treadmill if available<br>• Post lunch 10 min (schedule mein already hai)<br>• Post dinner 15 min dono saath ✅</div></div>
 
   <div class="card card-pink"><div style="font-size:13px;font-weight:800;color:#880E4F;margin-bottom:6px">🌸 Period Days — Modified Exercise</div><div style="font-size:13px;line-height:1.6;color:#6B5B8A">Day 1-2 (heavy flow): <b>Sirf yoga + pranayama</b> — no intense exercise.<br>Day 3-4: Light walk ok.<br>Day 5+: Normal routine resume karo.<br><br>Exercise band karne ki zaroorat nahi — <b>yoga + walk period mein best hai.</b></div></div>
 </div>
@@ -351,7 +376,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <div class="pane" id="p6">
   <div class="sec-title">🍳 Meal Prep Guide</div>
   <div class="sec-sub">Night before prep = zero effort mornings</div>
-  <div class="card card-purple"><div style="font-size:13px;font-weight:700;color:#4A148C">💡 WFH advantage — ghar pe ho toh lunch bhi ghar ka ho sakta hai. Dono ke liye same khana, same waqt. Alag nahi banana.</div></div>
+  <div class="card card-purple"><div style="font-size:13px;font-weight:700;color:#4A148C">💡 WFH advantage — ghar pe ho toh lunch bhi ghar ka ho sakta hai. Same meal for everyone — no need to cook separately.</div></div>
 
   <div class="sub-head">🌙 Every Night Before (10 min)</div>
   <div class="card">
@@ -564,6 +589,86 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   </div>
 </div>
 
+
+<!-- TAB 11: TIPS -->
+<div class="pane" id="p11">
+  <div class="sec-title">💡 Extra Tips</div>
+  <div class="sec-sub">Sleep · Eyes · Posture · Periods · Tracking</div>
+
+  <div class="sub-head">💤 Sleep Quality</div>
+  <div class="card card-purple">
+    <div style="font-size:13px;font-weight:700;color:#4A148C;margin-bottom:8px">Deep sleep = hormone balance = less period pain</div>
+    <div class="trow"><span class="trow-l">Room temperature</span><span class="trow-r">24-26°C optimal</span></div>
+    <div class="trow"><span class="trow-l">Room darkness</span><span class="trow-r">Blackout curtains / eye mask</span></div>
+    <div class="trow"><span class="trow-l">Sleep position</span><span class="trow-r">Left side — best digestion + period comfort</span></div>
+    <div class="trow"><span class="trow-l">Magnesium at night</span><span class="trow-r">Already in plan ✅</span></div>
+    <div class="trow"><span class="trow-l">No screens 30 min before</span><span class="trow-r">Blue light → melatonin blocked → hormone imbalance</span></div>
+  </div>
+
+  <div class="sub-head">☀️ Sunlight — Natural Vitamin D</div>
+  <div class="card card-yellow">
+    <div style="font-size:13px;line-height:1.6">Morning walk ke time <b>10-15 min direct sunlight</b> lo — sirf haath aur face. No sunscreen during this time.<br><br>Low Vitamin D = worse period pain. Supplement alag kaam karta hai, sunlight alag — dono chahiye.<br><br>Best time: <b>7:00 AM - 8:30 AM</b> Bengaluru mein.</div>
+  </div>
+
+  <div class="sub-head">👁️ Screen Time — Eye Care (WFH)</div>
+  <div class="card">
+    <div class="trow"><span class="trow-l">20-20-20 Rule</span><span class="trow-r">Har 20 min → 20 sec door dekho</span></div>
+    <div class="trow"><span class="trow-l">Night mode</span><span class="trow-r">Evening mein warm light on</span></div>
+    <div class="trow"><span class="trow-l">Screen distance</span><span class="trow-r">Minimum 50cm from eyes</span></div>
+    <div class="trow"><span class="trow-l">Lutein foods</span><span class="trow-r">Palak, corn, capsicum daily</span></div>
+    <div class="trow"><span class="trow-l">Every 2 hours</span><span class="trow-r">Uthke 5 min walk — circulation</span></div>
+  </div>
+
+  <div class="sub-head">🫁 Breathing + Posture (WFH)</div>
+  <div class="card">
+    <div style="font-size:13px;line-height:1.7">Sitting job mein <b>shallow breathing</b> hoti hai — cortisol high → period pain worse.<br><br>
+    <b>Fix:</b> Har 2 ghante 10 deep belly breaths lo. Inhale 4 sec → hold 4 sec → exhale 6 sec.<br><br>
+    <b>Posture:</b> Screen eye level pe rakho. Shoulders back. Har 1 hour 2 min stretch.</div>
+  </div>
+
+  <div class="sub-head">🧂 Salt Tips</div>
+  <div class="card card-blue">
+    <div class="trow"><span class="trow-l">Ghar mein use karo</span><span class="trow-r">Himalayan pink salt only</span></div>
+    <div class="trow"><span class="trow-l">Bahar ka khana</span><span class="trow-r">High sodium — bloating cause</span></div>
+    <div class="trow"><span class="trow-l">Water mein</span><span class="trow-r">Pinch per glass — TDS fix</span></div>
+    <div class="trow"><span class="trow-l">Period days mein</span><span class="trow-r">Low salt — reduces bloating + cramps</span></div>
+  </div>
+
+  <div class="sub-head">🌸 Period Tracking</div>
+  <div class="card card-pink">
+    <div style="font-size:13px;font-weight:800;color:#880E4F;margin-bottom:6px">Track karo — pattern samjho</div>
+    <div style="font-size:13px;line-height:1.7"><b>App:</b> Flo / Clue — free, accurate<br><br>
+    <b>Day 1-14:</b> Flaxseeds + Pumpkin seeds (seed cycling)<br>
+    <b>Day 15-28:</b> Sunflower + Sesame seeds<br><br>
+    <b>Period pain diary:</b> Note what you ate 2 days before pain starts — pattern pata chalega. Dairy + cold food + maida = most common triggers.</div>
+  </div>
+
+  <div class="sub-head">⚖️ Health Tracking</div>
+  <div class="card card-purple">
+    <div style="font-size:13px;line-height:1.7">Weight weekly once — same day, morning empty stomach.<br><br>
+    <b>Better metrics:</b><br>
+    • Energy levels (1-10 daily)<br>
+    • Period pain intensity (1-10)<br>
+    • Sleep quality (1-10)<br>
+    • Waist measurement monthly<br><br>
+    These numbers tell more than weight scale.</div>
+  </div>
+
+  <div class="sub-head">🛡️ Seasonal Immunity</div>
+  <div class="card">
+    <div style="font-size:13px;line-height:1.7">Monsoon mein humidity high = fungal + viral infections.<br><br>
+    <b>Monthly once:</b> Giloy kadha ya Tulsi + ginger tea 3-4 days.<br>
+    <b>Daily:</b> Lemon water + probiotic already in plan ✅<br>
+    <b>Avoid:</b> Outside cut fruits in monsoon.</div>
+  </div>
+
+  <div class="sub-head">🩸 Blood Test Reminder</div>
+  <div class="card card-red">
+    <div style="font-size:13px;font-weight:800;color:#C62828;margin-bottom:6px">Book This Week!</div>
+    <div style="font-size:13px;line-height:1.7">Thyrocare / Redcliffe package:<br>B12 + Vitamin D + CBC + Iron (Ferritin) + Thyroid (TSH) + Hormones (LH/FSH)<br><br><b>Cost:</b> ~₹1,200-1,800<br><b>Book:</b> Thyrocare / 1mg / Redcliffe app<br><b>Home collection</b> available.</div>
+  </div>
+</div>
+
 <!-- PROGRESS TIMELINE -->
 <div class="card card-dark" style="margin-top:20px">
   <div style="font-size:14px;font-weight:800;margin-bottom:12px">📅 Progress Timeline</div>
@@ -577,6 +682,39 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
+
+function calcBMI(){
+  var ht=parseFloat(document.getElementById('inp-ht').value)/100;
+  var wt=parseFloat(document.getElementById('inp-wt').value);
+  if(!ht||!wt)return;
+  var bmi=(wt/(ht*ht)).toFixed(1);
+  var idealMin=(18.5*ht*ht).toFixed(0);
+  var idealMax=(24.9*ht*ht).toFixed(0);
+  var cat,col;
+  if(bmi<18.5){cat='Underweight';col='#1565C0';}
+  else if(bmi<25){cat='Normal ✅';col='#2E7D32';}
+  else if(bmi<30){cat='Overweight';col='#E65100';}
+  else{cat='Obese';col='#C62828';}
+  document.getElementById('bmi-val').textContent=bmi;
+  document.getElementById('bmi-cat').textContent=cat;
+  document.getElementById('bmi-cat').style.color=col;
+  document.getElementById('ideal-val').textContent=idealMin+'-'+idealMax;
+  var diff=wt-parseFloat(idealMax);
+  document.getElementById('to-lose').textContent=diff>0?'+'+diff.toFixed(1)+'kg':'On target ✅';
+  document.getElementById('to-lose').style.color=diff>0?'#E65100':'#2E7D32';
+  var pct=Math.min(Math.max((bmi-10)/30,0),1)*100;
+  document.getElementById('bmi-marker').style.left=pct+'%';
+  document.getElementById('bmi-marker').style.display='block';
+  document.getElementById('bmi-bar-wrap').style.display='block';
+  var advice='';
+  if(bmi<18.5)advice='Increase calories + protein. Focus on nutrition quality.';
+  else if(bmi<25)advice='Excellent BMI! Focus on nutrition quality and muscle toning.';
+  else if(bmi<30)advice='Mild deficit + exercise. 0.5kg/week. Prioritize protein.';
+  else advice='Medical consultation recommended alongside this plan.';
+  document.getElementById('bmi-advice').textContent=advice;
+}
+calcBMI();
+
 function sw(i){
   document.querySelectorAll('.tab-btn').forEach((b,j)=>b.classList.toggle('active',i===j));
   document.querySelectorAll('.pane').forEach((p,j)=>p.classList.toggle('active',i===j));
